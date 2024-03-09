@@ -33,6 +33,7 @@ const { handleSubmit, handleReset } = useForm<RegistrationForm>({
     },
   },
 });
+
 const email = useField('email');
 const password = useField('password');
 const fullName = useField('fullName');
@@ -40,23 +41,22 @@ const country = useField('country');
 const city = useField('city');
 const street = useField('street');
 
-// const address = useField('address');
-// const enabled = ref(false);
-
 const auth = useAuth();
 
 const submit = handleSubmit(async ({ email, password, fullName, address }) => {
-  let data: IRegister = {
+  const data: IRegister = {
     email,
     password,
     fullName,
+    address: {
+      country: address?.country ?? '',
+      city: address?.city ?? '',
+      street: address?.street ?? '',
+    },
   };
 
-  if (address) {
-    data = { ...data, address: address };
-  }
-
   await auth.register(data);
+  handleReset();
 });
 </script>
 
@@ -64,14 +64,12 @@ const submit = handleSubmit(async ({ email, password, fullName, address }) => {
   <auth-view class="auth">
     <v-sheet class="mx-auto" width="400">
       <v-form @submit.prevent="submit" class="auth__form">
+        <div class="text-h4 text-center">Sign Up</div>
         <v-text-field
           variant="outlined"
-          v-model="password.value.value"
-          :error-messages="password.errorMessage.value"
-          label="Password"
-          :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-          :type="visible ? 'text' : 'password'"
-          @click:append-inner="visible = !visible"
+          v-model="fullName.value.value"
+          :error-messages="fullName.errorMessage.value"
+          label="Full name"
         ></v-text-field>
 
         <v-text-field
@@ -83,11 +81,13 @@ const submit = handleSubmit(async ({ email, password, fullName, address }) => {
 
         <v-text-field
           variant="outlined"
-          v-model="fullName.value.value"
-          :error-messages="fullName.errorMessage.value"
-          label="Full name"
+          v-model="password.value.value"
+          :error-messages="password.errorMessage.value"
+          label="Password"
+          :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+          :type="visible ? 'text' : 'password'"
+          @click:append-inner="visible = !visible"
         ></v-text-field>
-
         <v-expansion-panels>
           <v-expansion-panel>
             <v-expansion-panel-title>Address (optional)</v-expansion-panel-title>
@@ -117,8 +117,12 @@ const submit = handleSubmit(async ({ email, password, fullName, address }) => {
         </v-expansion-panels>
 
         <div class="auth__actions">
-          <v-btn type="submit" variant="elevated">submit</v-btn>
+          <v-btn type="submit" variant="elevated" block>Sign up</v-btn>
         </div>
+
+        <v-card-text class="text-center">
+          <v-btn to="/login" variant="text">Login</v-btn>
+        </v-card-text>
       </v-form>
     </v-sheet>
   </auth-view>

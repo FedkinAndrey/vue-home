@@ -3,7 +3,6 @@ import authApi, { ILogin, IRegister } from '../api/authApiController';
 import router from '../router';
 import { ROUTE_NAMES } from '../constants/route-names.ts';
 import { useSnackbarStore } from './snackbar.ts';
-// import { useSnackbarStore } from '@/stores/snackbarStore';
 
 export const useAuth = defineStore('auth', {
   state: () => ({
@@ -19,14 +18,14 @@ export const useAuth = defineStore('auth', {
     async register(data: IRegister) {
       this.isRegistering = true;
       const response = await authApi.register(data);
+      const isErrorExist = 'message' in response;
       console.log('register', response);
-      if (response.message) {
+      if (isErrorExist) {
         const snackbarStore = useSnackbarStore();
-        snackbarStore.showMessage(`${response.message}`, 'info');
-        this.redirectToHome();
-        return;
+        snackbarStore.showMessage(`${response?.message}`, 'error');
+        this.isRegistering = false;
       }
-      if (response) {
+      if (response && !isErrorExist) {
         this.isRegistering = false;
         await this.login(data);
       } else {
@@ -37,7 +36,9 @@ export const useAuth = defineStore('auth', {
     async login(data: ILogin) {
       this.isAuthenticating = true;
       const response = await authApi.login(data);
-      if (response) {
+      const isErrorExist = 'message' in response;
+      console.log('login', response);
+      if (response && !isErrorExist) {
         this.token = response.headers.authorization;
         if (this.token) {
           localStorage.setItem('token', this.token);
@@ -45,8 +46,9 @@ export const useAuth = defineStore('auth', {
         }
         await router.push({ name: ROUTE_NAMES.POSTS });
       } else {
+        const snackbarStore = useSnackbarStore();
+        snackbarStore.showMessage(`${response.message}`, 'error');
         this.token = null;
-        this.redirectToHome();
         this.clearStorage();
       }
       this.isAuthenticating = false;
