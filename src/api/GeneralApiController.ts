@@ -39,6 +39,7 @@ class GeneralApiController {
             };
       },
       (error) => {
+        console.log(error);
         if (import.meta.env.VUE_APP_DEBUG) {
           console.warn('API RESPONSE ERROR', error);
         }

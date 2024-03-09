@@ -1,4 +1,3 @@
-// src/stores/snackbarStore.ts
 import { defineStore } from 'pinia';
 
 interface SnackbarState {
@@ -19,11 +18,6 @@ export const useSnackbarStore = defineStore('snackbar', {
       this.message = message;
       this.color = color;
       this.visible = true;
-
-      // Automatically hide the snackbar after 'timeout' milliseconds
-      // setTimeout(() => {
-      //   this.visible = false;
-      // }, timeout);
     },
 
     hideMessage() {

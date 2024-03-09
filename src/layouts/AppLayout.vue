@@ -14,10 +14,10 @@ const snackbarStore = useSnackbarStore();
 </script>
 
 <template>
-  <v-snackbar v-model="snackbarStore.visible" :color="snackbarStore.color" :timeout="3000">
+  <v-snackbar v-model="snackbarStore.visible" :color="snackbarStore.color" :timeout="3000" location="top right">
     {{ snackbarStore.message }}
     <template #actions>
-      <v-btn color="blue" variant="text" @click="snackbarStore.hideMessage"> Close </v-btn>
+      <v-btn variant="text" @click="snackbarStore.hideMessage">Close</v-btn>
     </template>
   </v-snackbar>
   <v-layout class="rounded rounded-md h-screen align-center">

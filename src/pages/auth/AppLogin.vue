@@ -12,7 +12,7 @@ interface LoginForm {
 const { handleSubmit, handleReset } = useForm<LoginForm>({
   validationSchema: {
     email(value: string) {
-      if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true;
+      if (/^(?:\d{10}|\w+@\w+\.\w{2,3})$/i.test(value)) return true;
 
       return 'Must be a valid e-mail.';
     },
@@ -34,6 +34,7 @@ const submit = handleSubmit(async ({ email, password }) => {
     email,
     password,
   });
+  handleReset();
 });
 </script>
 
@@ -41,6 +42,7 @@ const submit = handleSubmit(async ({ email, password }) => {
   <auth-view class="auth">
     <v-sheet class="mx-auto" width="400">
       <v-form @submit.prevent="submit" class="auth__form">
+        <div class="text-h4 text-center">Login</div>
         <v-text-field
           variant="outlined"
           v-model="email.value.value"
@@ -61,13 +63,11 @@ const submit = handleSubmit(async ({ email, password }) => {
         ></v-text-field>
 
         <div class="auth__actions">
-          <v-btn type="submit" variant="elevated">submit</v-btn>
+          <v-btn type="submit" variant="elevated" block>Login</v-btn>
         </div>
 
         <v-card-text class="text-center">
-          <a class="text-blue text-decoration-none" href="#" rel="noopener noreferrer" target="_blank">
-            Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
-          </a>
+          <v-btn to="/signup" variant="text">Sign up now</v-btn>
         </v-card-text>
       </v-form>
     </v-sheet>
