@@ -23,9 +23,7 @@ const snackbarStore = useSnackbarStore();
   <v-layout class="rounded rounded-md h-screen align-center">
     <Preloader v-if="loading" />
 
-    <v-app-bar title="Application bar" v-if="auth.isAuthenticated">
-      <header>header</header>
-    </v-app-bar>
+    <v-app-bar title="Application bar" v-if="auth.isAuthenticated"></v-app-bar>
 
     <v-main class="d-flex align-center justify-center">
       <slot></slot>
