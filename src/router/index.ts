@@ -1,9 +1,9 @@
-import { createRouter, createWebHistory, START_LOCATION } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import { ROUTE_NAMES } from '../constants/route-names.ts';
 import AppLogin from '../pages/auth/AppLogin.vue';
 import AppRegistration from '../pages/auth/AppRegistration.vue';
 import { useAuth } from '../store/auth.ts';
-import UserPosts from '../pages/user/UserPosts.vue';
+import PostsList from '../pages/posts/list/PostsList.vue';
 import CreatePost from '../pages/user/CreatePost.vue';
 
 const routes = [
@@ -31,7 +31,7 @@ const routes = [
   {
     path: '/posts',
     name: ROUTE_NAMES.POSTS,
-    component: UserPosts,
+    component: PostsList,
     meta: {
       requiresAuth: true,
     },
@@ -56,52 +56,22 @@ const router = createRouter({
   routes,
 });
 
-// router.beforeEach(async (to, from, next) => {
-//   const auth = useAuth();
-//
-//
-//   if (from === START_LOCATION) {
-//     if (auth.token) {
-//       auth.isAuthenticated = true;
-//       router.addRoute({ path: '/', name: 'Home', redirect: '/posts' });
-//       // next('/posts');
-//     }
-//   }
-//
-//   if (to.meta.requiresAuth) {
-//     if (!auth.isAuthenticated) {
-//       next('/login');
-//       return;
-//     }
-//   }
-//
-//   if (to.meta.notAuthenticatedOnly) {
-//     if (auth.isAuthenticated) {
-//       next('/');
-//       return;
-//     }
-//   }
-//
-//   next();
-// });
-
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _, next) => {
   const auth = useAuth();
 
-  if (to.meta.requiresAuth) {
-    // const token = localStorage.getItem('token');
-    if (auth.token) {
-      auth.isAuthenticated = true;
-      // User is authenticated, proceed to the route
-      next();
-    } else {
-      // User is not authenticated, redirect to login
-      next('/login');
-    }
-  } else {
-    // Non-protected route, allow access
-    next();
+  const isUserAuthenticated = auth.isAuthenticated || auth.token;
+
+  if (to.meta.requiresAuth && !isUserAuthenticated) {
+    next('/login');
+    return;
   }
+
+  if (to.meta.notAuthenticatedOnly && isUserAuthenticated) {
+    next('/posts');
+    return;
+  }
+
+  next();
 });
 
 export default router;

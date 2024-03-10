@@ -9,6 +9,7 @@ import 'vuetify/styles';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
+import { useAuth } from './store/auth.ts';
 
 const vuetify = createVuetify({
   components,
@@ -21,6 +22,10 @@ const pinia = createPinia();
 pinia.use(({ store }) => (store.$router = markRaw(router)));
 
 app.use(pinia);
+
+const authStore = useAuth();
+authStore.validateAuth();
+
 app.use(router);
 app.use(vuetify);
 

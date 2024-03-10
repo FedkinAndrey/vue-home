@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia';
-import authApi, { ILogin, IRegister } from '../api/authApiController';
+import authApi, { ILogin, IRegister } from '../api/AuthApiController.ts';
 import router from '../router';
 import { ROUTE_NAMES } from '../constants/route-names.ts';
 import { useSnackbarStore } from './snackbar.ts';
+
+// const snackbarStore = useSnackbarStore();
 
 export const useAuth = defineStore('auth', {
   state: () => ({
@@ -12,9 +14,15 @@ export const useAuth = defineStore('auth', {
     resetToken: '',
     rememberMe: false,
     token: localStorage.getItem('token') || null,
+    userId: localStorage.getItem('userId') || null,
+    email: localStorage.getItem('email') || null,
+    fullName: localStorage.getItem('fullName') || null,
   }),
 
   actions: {
+    validateAuth() {
+      this.isAuthenticated = !!this.token;
+    },
     async register(data: IRegister) {
       this.isRegistering = true;
       const response = await authApi.register(data);
@@ -37,11 +45,14 @@ export const useAuth = defineStore('auth', {
       this.isAuthenticating = true;
       const response = await authApi.login(data);
       const isErrorExist = 'message' in response;
-      console.log('login', response);
       if (response && !isErrorExist) {
         this.token = response.headers.authorization;
+        const data = response.data.data;
         if (this.token) {
           localStorage.setItem('token', this.token);
+          localStorage.setItem('email', data.email);
+          localStorage.setItem('fullName', data.fullName);
+          localStorage.setItem('userId', data.id);
           this.isAuthenticated = true;
         }
         await router.push({ name: ROUTE_NAMES.POSTS });
@@ -56,6 +67,7 @@ export const useAuth = defineStore('auth', {
 
     async logout() {
       await authApi.logout();
+      this.clearStorage();
       this.resetAuthState();
     },
 

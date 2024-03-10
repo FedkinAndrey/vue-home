@@ -34,20 +34,4 @@ const { loading } = defineProps<IProps>();
     flex: 1;
   }
 }
-
-@include _1024 {
-  .page-layout {
-    &__content {
-      padding: 8px 0 16px;
-    }
-  }
-}
-
-@include _767 {
-  .page-layout {
-    &__content {
-      position: static; // чтоб модалка employee поднялась выше
-    }
-  }
-}
 </style>
