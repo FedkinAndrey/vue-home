@@ -22,6 +22,7 @@ export const useAuth = defineStore('auth', {
   actions: {
     validateAuth() {
       this.isAuthenticated = !!this.token;
+      console.log(this.isAuthenticated);
     },
     async register(data: IRegister) {
       this.isRegistering = true;

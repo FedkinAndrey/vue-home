@@ -4,7 +4,7 @@ import AppLogin from '../pages/auth/AppLogin.vue';
 import AppRegistration from '../pages/auth/AppRegistration.vue';
 import { useAuth } from '../store/auth.ts';
 import PostsList from '../pages/posts/list/PostsList.vue';
-import CreatePost from '../pages/user/CreatePost.vue';
+import UserProfile from '../pages/user/UserProfile.vue';
 
 const routes = [
   {
@@ -39,7 +39,7 @@ const routes = [
   {
     path: '/create',
     name: ROUTE_NAMES.CREATE_POST,
-    component: CreatePost,
+    component: UserProfile,
     meta: {
       requiresAuth: true,
     },
