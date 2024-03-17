@@ -1,9 +1,9 @@
 import GeneralApiController from './GeneralApiController';
 
 export interface IAddress {
-  street: string;
-  city: string;
-  country: string;
+  street?: string;
+  city?: string;
+  country?: string;
 }
 
 export interface IRegister {
@@ -20,7 +20,7 @@ class AuthApiController extends GeneralApiController {
 
   login = (data: ILogin) => this.http.post('/auth/login', data);
 
-  logout = () => this.http.post('logout');
+  logout = () => this.http.post('/auth/logout');
 }
 
 const authApiController = new AuthApiController();

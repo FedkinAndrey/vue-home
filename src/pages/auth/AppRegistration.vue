@@ -9,7 +9,9 @@ interface RegistrationForm {
   email: string;
   password: string;
   fullName: string;
-  address?: IAddress;
+  country?: string;
+  city?: string;
+  street?: string;
 }
 
 const visible = ref(false);
@@ -29,7 +31,7 @@ const { handleSubmit, handleReset } = useForm<RegistrationForm>({
     fullName(value: string) {
       if (value?.length >= 2) return true;
 
-      return 'Full name needs to be at least 6 characters.';
+      return 'Full name needs to be at least 2 characters.';
     },
   },
 });
@@ -43,19 +45,40 @@ const street = useField('street');
 
 const auth = useAuth();
 
-const submit = handleSubmit(async ({ email, password, fullName, address }) => {
-  const data: IRegister = {
-    email,
-    password,
-    fullName,
-    address: {
-      country: address?.country ?? '',
-      city: address?.city ?? '',
-      street: address?.street ?? '',
-    },
+const submit = handleSubmit(async ({ email, password, fullName, country, city, street }) => {
+  const data = {
+    email: email,
+    password: password,
+    fullName: fullName,
   };
 
-  await auth.register(data);
+  let addressData: IAddress = {};
+
+  if (country) {
+    addressData = {
+      ...addressData,
+      country: country,
+    };
+  }
+  if (country) {
+    addressData = {
+      ...addressData,
+      city: city,
+    };
+  }
+  if (country) {
+    addressData = {
+      ...addressData,
+      street: street,
+    };
+  }
+
+  const submitData: IRegister = {
+    ...data,
+    address: addressData,
+  };
+
+  await auth.register(submitData);
   handleReset();
 });
 </script>

@@ -1,5 +1,7 @@
 <script lang="ts">
 import { useAuth } from '../../store/auth.ts';
+import { useUserStore } from '../../pages/user/store/userStore.ts';
+import { usePostsStore } from '../../pages/posts/list/store/postsStore.ts';
 
 export default {
   name: 'AppHeader',
@@ -11,23 +13,21 @@ export default {
   computed: {
     isAuthenticated() {
       const auth = useAuth();
-      // You need to replace this with your actual authentication logic
-      // For example, check Vuex store, Pinia store, or localStorage
-      return auth.isAuthenticated; // Placeholder: Assume true for now
-    },
-    isRouteActive() {
-      // Use this.$route if you are inside Options API
-      const route = this.$route;
-      // Example logic, replace '/my-posts' with your actual route
-      return route.path === '/my-posts';
+      return auth.isAuthenticated;
     },
   },
   methods: {
     logout() {
       const auth = useAuth();
+      const userStore = useUserStore();
+      const postStore = usePostsStore();
       auth.logout();
+      userStore.clearUserStorage();
+      postStore.clearPostsStore();
     },
-    // Your methods for interacting with the component can go here
+    isRouteActive(targetPath: string) {
+      return this.$route.path === targetPath;
+    },
   },
 };
 </script>
@@ -40,10 +40,25 @@ export default {
       <v-spacer></v-spacer>
 
       <nav class="d-flex ga-3 align-center">
-        <v-btn variant="tonal" color="blue">my posts</v-btn>
-        <v-btn color="orange">all posts</v-btn>
-        <v-btn color="orange">create posts</v-btn>
-        <v-btn icon>
+        <v-btn
+          :color="isRouteActive('/posts') ? 'blue' : 'orange'"
+          :variant="isRouteActive('/posts') ? 'tonal' : ''"
+          to="/posts"
+          >my posts</v-btn
+        >
+        <v-btn
+          :color="isRouteActive('/all-posts') ? 'blue' : 'orange'"
+          :variant="isRouteActive('/all-posts') ? 'tonal' : ''"
+          to="/all-posts"
+          >all posts</v-btn
+        >
+        <v-btn
+          :color="isRouteActive('/create') ? 'blue' : 'orange'"
+          :variant="isRouteActive('/create') ? 'tonal' : ''"
+          to="/create"
+          >create posts</v-btn
+        >
+        <v-btn icon to="/profile">
           <v-icon>mdi-account</v-icon>
         </v-btn>
         <v-btn icon @click="logout">

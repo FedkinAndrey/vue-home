@@ -60,5 +60,10 @@ export const usePostsStore = defineStore('posts', {
       this.posts = [];
       this.fetchUserPosts(id);
     },
+
+    clearPostsStore() {
+      this.posts = null;
+      this.userPosts = null;
+    },
   },
 });
