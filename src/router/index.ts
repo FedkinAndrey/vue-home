@@ -4,7 +4,9 @@ import AppLogin from '../pages/auth/AppLogin.vue';
 import AppRegistration from '../pages/auth/AppRegistration.vue';
 import { useAuth } from '../store/auth.ts';
 import PostsList from '../pages/posts/list/PostsList.vue';
-import CreatePost from '../pages/user/CreatePost.vue';
+import UserProfile from '../pages/user/UserProfile.vue';
+import AllPostsList from '../pages/posts/list/AllPostsList.vue';
+import CreatePost from '../pages/posts/create/CreatePost.vue';
 
 const routes = [
   {
@@ -37,9 +39,25 @@ const routes = [
     },
   },
   {
+    path: '/all-posts',
+    name: ROUTE_NAMES.ALL_POSTS,
+    component: AllPostsList,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: '/create',
     name: ROUTE_NAMES.CREATE_POST,
     component: CreatePost,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/profile',
+    name: ROUTE_NAMES.PROFILE,
+    component: UserProfile,
     meta: {
       requiresAuth: true,
     },

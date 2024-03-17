@@ -12,7 +12,7 @@ const { loading } = defineProps<IProps>();
   <div class="page-layout">
     <div class="page-layout__content">
       <AppPreloader v-if="loading" />
-      <slot v-else />
+      <slot v-else></slot>
     </div>
   </div>
 </template>

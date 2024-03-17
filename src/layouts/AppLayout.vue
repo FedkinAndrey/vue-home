@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useAuth } from '../store/auth.ts';
 import Preloader from '../components/base/AppPreloader.vue';
 import { useSnackbarStore } from '../store/snackbar.ts';
+import AppHeader from '../components/header/AppHeader.vue';
 
 interface Props {
   isActive?: boolean;
@@ -9,7 +9,6 @@ interface Props {
 }
 
 const { loading, isActive } = defineProps<Props>();
-const auth = useAuth();
 const snackbarStore = useSnackbarStore();
 </script>
 
@@ -23,7 +22,7 @@ const snackbarStore = useSnackbarStore();
   <v-layout class="rounded rounded-md h-screen align-center">
     <Preloader v-if="loading" />
 
-    <v-app-bar title="Application bar" v-if="auth.isAuthenticated"></v-app-bar>
+    <app-header />
 
     <v-main class="d-flex align-center justify-center">
       <slot></slot>

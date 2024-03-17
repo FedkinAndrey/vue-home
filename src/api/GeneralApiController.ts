@@ -27,14 +27,11 @@ class GeneralApiController {
 
     this.http.interceptors.response.use(
       (response) => {
-        // Modify the response.data object directly if you need to add custom properties
         const modifiedData = {
           data: response.data,
-          // headers: response.headers,
-          success: true, // Add custom properties within the data object
+          success: true,
         };
 
-        // Return the entire response object with the modified data
         return {
           ...response,
           data: modifiedData,
@@ -45,15 +42,13 @@ class GeneralApiController {
         if (import.meta.env.VUE_APP_DEBUG) {
           console.warn('API RESPONSE ERROR', error);
         }
-        const response = error?.response;
+        const response = error?.response.data;
 
         if (!response) {
-          console.log(error);
-          return Promise.reject(error); // Ensure to reject the promise with the error
+          return error;
         }
 
-        // Optionally modify error.response.data or handle it as needed
-        return Promise.reject(response.data); // Reject with the modified data
+        return response;
       }
     );
   }
