@@ -7,15 +7,21 @@ interface ICategory {
   name: string;
 }
 
-interface IPost {
+export interface IPost {
   id: number;
   title: string;
   content: string;
   categories: ICategory[];
 }
 
+export type IPostWithAuthor = IPost & {
+  author: {
+    fullName: string;
+  };
+};
+
 interface IPostStore {
-  posts: IPost[] | null;
+  posts: IPostWithAuthor[] | null;
   userPosts: IPost[] | null;
   loading: boolean;
 }
@@ -31,24 +37,26 @@ export const usePostsStore = defineStore('posts', {
       this.loading = true;
       try {
         const response = await postApiController.getAllPosts();
-        this.posts = response.data.data;
+        this.posts = response.data;
       } catch (error) {
         console.error('Failed to fetch posts:', error);
       } finally {
         this.loading = false;
       }
+      this.loading = false;
     },
 
     async fetchUserPosts(id: number | string) {
       this.loading = true;
       try {
         const response = await userApiController.getAllPostsByUser(id);
-        this.userPosts = response.data.data;
+        this.userPosts = response.data;
       } catch (error) {
         console.error('Failed to fetch posts:', error);
       } finally {
         this.loading = false;
       }
+      this.loading = false;
     },
 
     async refetchAllPosts() {

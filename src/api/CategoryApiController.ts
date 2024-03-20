@@ -1,7 +1,7 @@
 import GeneralApiController from './GeneralApiController';
 
 export interface ICategory {
-  id: number | string;
+  name: string;
 }
 
 class CategoryApiController extends GeneralApiController {

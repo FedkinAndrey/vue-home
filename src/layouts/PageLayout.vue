@@ -5,13 +5,13 @@ interface IProps {
   loading: boolean;
 }
 
-const { loading } = defineProps<IProps>();
+const props = defineProps<IProps>();
 </script>
 
 <template>
   <div class="page-layout">
     <div class="page-layout__content">
-      <AppPreloader v-if="loading" />
+      <AppPreloader v-if="props.loading" />
       <slot v-else></slot>
     </div>
   </div>

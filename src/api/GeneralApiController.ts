@@ -27,14 +27,8 @@ class GeneralApiController {
 
     this.http.interceptors.response.use(
       (response) => {
-        const modifiedData = {
-          data: response.data,
-          success: true,
-        };
-
         return {
           ...response,
-          data: modifiedData,
         };
       },
       (error) => {
@@ -42,7 +36,7 @@ class GeneralApiController {
         if (import.meta.env.VUE_APP_DEBUG) {
           console.warn('API RESPONSE ERROR', error);
         }
-        const response = error?.response.data;
+        const response = error?.response;
 
         if (!response) {
           return error;

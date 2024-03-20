@@ -38,39 +38,15 @@ export const useAuth = defineStore('auth', {
       }
     },
 
-    /*   async login(data: ILogin) {
-      this.isAuthenticating = true;
-      const response = await authApi.login(data);
-      const isErrorExist = 'message' in response;
-      if (response && !isErrorExist) {
-        this.token = response.headers.authorization;
-        const data = response.data.data;
-        if (this.token) {
-          localStorage.setItem('token', this.token);
-          localStorage.setItem('email', data.email);
-          localStorage.setItem('fullName', data.fullName);
-          localStorage.setItem('userId', data.id);
-          this.isAuthenticated = true;
-        }
-        await router.push({ name: ROUTE_NAMES.POSTS });
-      } else {
-        const snackbarStore = useSnackbarStore();
-        snackbarStore.showMessage(`${response.message}`, 'error');
-        this.token = null;
-        this.clearStorage();
-        this.isAuthenticating = false;
-      }
-      this.isAuthenticating = false;
-    },*/
-
     async login(data: ILogin) {
+      const snackbarStore = useSnackbarStore();
       this.isAuthenticating = true;
 
       const response = await authApi.login(data);
+      console.log(response);
       const isErrorExist = 'message' in response;
 
       if (isErrorExist) {
-        const snackbarStore = useSnackbarStore();
         snackbarStore.showMessage(`${response.message}`, 'error');
         this.token = null;
         this.clearStorage();
@@ -79,7 +55,7 @@ export const useAuth = defineStore('auth', {
       }
 
       this.token = response.headers.authorization;
-      const userData = response.data.data;
+      const userData = response.data;
 
       if (this.token && userData && !isErrorExist) {
         // Set the token and user details in localStorage

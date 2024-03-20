@@ -3,9 +3,9 @@ import { ROUTE_NAMES } from '../constants/route-names.ts';
 import AppLogin from '../pages/auth/AppLogin.vue';
 import AppRegistration from '../pages/auth/AppRegistration.vue';
 import { useAuth } from '../store/auth.ts';
-import PostsList from '../pages/posts/list/PostsList.vue';
+import PostsList from '../pages/posts/list/UserPosts.vue';
 import UserProfile from '../pages/user/UserProfile.vue';
-import AllPostsList from '../pages/posts/list/AllPostsList.vue';
+import AllPostsList from '../pages/posts/list/AllPostsPage.vue';
 import CreatePost from '../pages/posts/create/CreatePost.vue';
 
 const routes = [

@@ -4,11 +4,11 @@ export interface IPost {
   id: number | string;
 }
 
-interface ICategoryInPost {
+export interface ICategoryInPost {
   id: number;
 }
 
-interface ICreatePost {
+export interface ICreatePost {
   title: string;
   content: string;
   categories?: ICategoryInPost[];
