@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import { IPost, IPostWithAuthor } from '../store/postsStore.ts';
 import { ref } from 'vue';
+import AppModal from '../../../../components/base/Modal/AppModal.vue';
 
 interface IProps<T> {
   posts: T[];
 }
 
-const dialog = ref(false);
+const open = ref(false);
+const openModal = () => {
+  console.log('open');
+  open.value = true;
+};
+
+const closeModal = () => {
+  open.value = false;
+};
 
 const { posts } = defineProps<IProps<IPostWithAuthor | IPost>>();
 </script>
@@ -34,25 +43,16 @@ const { posts } = defineProps<IProps<IPostWithAuthor | IPost>>();
         </div>
       </div>
 
-      <div class="btn-icon" v-if="!('author' in post)">
-        <v-tooltip location="top">
-          <template #activator="{ props }">
-            <v-btn v-bind="props" icon size="small" @click="dialog = true">
-              <v-icon>mdi-file-document-edit-outline</v-icon>
-            </v-btn>
-          </template>
-          Edit Post
-        </v-tooltip>
+      <div v-if="!('author' in post)" class="post__actions">
+        <v-btn variant="tonal" @click="openModal">Edit</v-btn>
+        <v-btn variant="outlined" @click="openModal">Delete</v-btn>
       </div>
+
+      <app-modal v-model:open="open" :has-close-button="true">
+        <template #title>hello title</template>
+        <div>content</div>
+      </app-modal>
     </div>
-
-    <v-dialog v-model="dialog" max-width="400" persistent>
-      <v-spacer></v-spacer>
-
-      <v-btn @click="dialog = false"> Disagree </v-btn>
-
-      <v-btn @click="dialog = false"> Agree </v-btn>
-    </v-dialog>
   </div>
 </template>
 
@@ -79,6 +79,7 @@ const { posts } = defineProps<IProps<IPostWithAuthor | IPost>>();
     display: flex;
     flex-direction: column;
     gap: 10px;
+
     &-title {
       font-size: 20px;
 
@@ -97,6 +98,13 @@ const { posts } = defineProps<IProps<IPostWithAuthor | IPost>>();
     }
   }
 
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
   &__category {
     display: flex;
 
@@ -109,12 +117,6 @@ const { posts } = defineProps<IProps<IPostWithAuthor | IPost>>();
       font-size: 12px;
       color: #74acff;
     }
-  }
-
-  .btn-icon {
-    position: absolute;
-    top: 10px;
-    right: 10px;
   }
 }
 </style>
