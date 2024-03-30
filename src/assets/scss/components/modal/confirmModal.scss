@@ -1,0 +1,13 @@
+.confirm-text {
+	margin-bottom: 24px;
+}
+
+.confirm {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	column-gap: 45px;
+	.btn {
+		box-shadow: none;
+	}
+}

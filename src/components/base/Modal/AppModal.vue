@@ -1,43 +1,45 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-
-const emits = defineEmits(['update:open', 'close']);
-
-const closeModal = () => {
-  emits('update:open', false); // This is important
-  emits('close'); // This is important
-};
+import { defineProps, defineEmits } from 'vue';
 
 interface ModalProps {
   open: boolean;
-  hasCloseButton: boolean;
+  hasCloseButton?: boolean;
 }
 
-const { open, hasCloseButton } = withDefaults(defineProps<ModalProps>(), {
+const props = withDefaults(defineProps<ModalProps>(), {
   open: false,
   hasCloseButton: true,
 });
 
-const openModal = ref(open);
+const emit = defineEmits(['update:open']);
+
+const closeModalDefault = () => {
+  // props.close();
+  emit('update:open', false);
+};
 </script>
 
 <template>
-  <v-dialog v-model="openModal" activator="parent" max-width="500" min-width="300" persistent>
-    <v-btn icon size="small" v-if="hasCloseButton" @click.stop="closeModal">
-      <v-icon>mdi-close-circle-outline</v-icon>
-    </v-btn>
-    <v-spacer></v-spacer>
-
-    <div>
-      <h2 v-if="$slots.title" class="modal__title">
-        <slot name="title"></slot>
-      </h2>
-      <slot></slot>
+  <v-dialog v-model="props.open" max-width="500" persistent class="modal">
+    <div class="modal__content">
+      <v-btn
+        variant="flat"
+        icon
+        size="medium"
+        v-if="props.hasCloseButton"
+        @click.stop="closeModalDefault"
+        class="modal__close"
+      >
+        <v-icon>mdi-close-circle-outline</v-icon>
+      </v-btn>
+      <div class="modal__inner">
+        <h2 v-if="$slots.title" class="modal__title">
+          <slot name="title"></slot>
+        </h2>
+        <slot></slot>
+      </div>
     </div>
-
-    <v-btn @click="closeModal">Disagree</v-btn>
-    <v-btn @click="closeModal">Agree</v-btn>
   </v-dialog>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss" src="@/assets/scss/components/modal/appModal.scss"></style>

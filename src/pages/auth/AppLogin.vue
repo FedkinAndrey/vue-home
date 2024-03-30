@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate';
-import { useAuth } from '../../store/auth.ts';
+import { useAuth } from '@/store/auth.ts';
 import AuthView from './components/AuthView.vue';
 import { ref } from 'vue';
 

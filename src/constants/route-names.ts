@@ -5,4 +5,5 @@ export const ROUTE_NAMES = {
   ALL_POSTS: 'all-posts',
   CREATE_POST: 'create',
   PROFILE: 'profile',
+  CATEGORY: 'category',
 };

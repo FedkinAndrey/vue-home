@@ -1,30 +1,44 @@
 import { defineStore } from 'pinia';
 
+interface ConfirmationOptions {
+  title?: string;
+  text?: string;
+  onSubmit: () => void;
+  onReject: () => void;
+}
+
 interface ConfirmState {
   isActive: boolean;
-  options: object;
+  options: ConfirmationOptions;
 }
 
 const useConfirmation = defineStore('confirmation', {
   state: (): ConfirmState => ({
     isActive: false,
-    options: {},
+    options: {
+      title: '',
+      text: '',
+      onSubmit: () => {},
+      onReject: () => {},
+    },
   }),
   actions: {
-    showConfirmation({ title = '', text = '', hint = '', onSubmit = () => {}, onReject = () => {} } = {}) {
+    showConfirmation(options: Partial<ConfirmationOptions> = {}) {
       this.options = {
-        title,
-        text,
-        hint,
-        onSubmit,
-        onReject,
+        ...this.options,
+        ...options,
       };
 
       this.isActive = true;
     },
     closeConfirmation() {
       this.isActive = false;
-      this.options = {};
+      this.options = {
+        title: '',
+        text: '',
+        onSubmit: () => {},
+        onReject: () => {},
+      };
     },
   },
 });
