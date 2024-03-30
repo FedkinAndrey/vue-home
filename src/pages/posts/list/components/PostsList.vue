@@ -1,20 +1,39 @@
 <script setup lang="ts">
 import { IPost, IPostWithAuthor } from '../store/postsStore.ts';
 import { ref } from 'vue';
-import AppModal from '../../../../components/base/Modal/AppModal.vue';
+import useConfirmation from '../../../../store/confirmation.ts';
+import postApiController from '../../../../api/PostApiController.ts';
+import UpdatePostModal from '../../../../components/base/Modal/UpdatePostModal.vue';
+import { useSnackbarStore } from '@/store/snackbar.ts';
 
 interface IProps<T> {
   posts: T[];
 }
+const snackbarStore = useSnackbarStore();
 
 const open = ref(false);
+const emit = defineEmits(['postDeleted']);
+
 const openModal = () => {
-  console.log('open');
   open.value = true;
 };
 
-const closeModal = () => {
-  open.value = false;
+const confirmation = useConfirmation();
+
+const handleDelete = async (id: number) => {
+  confirmation.showConfirmation({
+    title: `Do you want to delete this post with ${id}`,
+    onSubmit: async () => {
+      const response = await postApiController.deletePost(id);
+      if (response.status === 404) {
+        snackbarStore.showMessage('Post deleted', 'success');
+        emit('postDeleted');
+        const myMusic = document.getElementById('audio1');
+        myMusic.play();
+      }
+    },
+    onReject: () => {},
+  });
 };
 
 const { posts } = defineProps<IProps<IPostWithAuthor | IPost>>();
@@ -26,9 +45,9 @@ const { posts } = defineProps<IProps<IPostWithAuthor | IPost>>();
       <div class="post__content">
         <div class="post__content-title">
           <h3>{{ post.title }}</h3>
-          <p>
+          <p v-if="'author' in post">
             <span>Author:</span>
-            <span v-if="'author' in post" class="name">{{ post.author.fullName }}</span>
+            <span class="name">{{ post.author.fullName }}</span>
           </p>
         </div>
         <div class="text-caption">
@@ -45,13 +64,10 @@ const { posts } = defineProps<IProps<IPostWithAuthor | IPost>>();
 
       <div v-if="!('author' in post)" class="post__actions">
         <v-btn variant="tonal" @click="openModal">Edit</v-btn>
-        <v-btn variant="outlined" @click="openModal">Delete</v-btn>
+        <v-btn variant="outlined" @click="handleDelete(post.id)">Delete</v-btn>
       </div>
 
-      <app-modal v-model:open="open" :has-close-button="true">
-        <template #title>hello title</template>
-        <div>content</div>
-      </app-modal>
+      <update-post-modal :open="open" :post="post" @update:open="open = $event" />
     </div>
   </div>
 </template>

@@ -61,12 +61,12 @@ export const usePostsStore = defineStore('posts', {
 
     async refetchAllPosts() {
       this.posts = [];
-      this.fetchAllPosts();
+      await this.fetchAllPosts();
     },
 
     async refetchUserPosts(id: number | string) {
       this.posts = [];
-      this.fetchUserPosts(id);
+      await this.fetchUserPosts(id);
     },
 
     clearPostsStore() {

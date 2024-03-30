@@ -7,6 +7,7 @@ import PostsList from '../pages/posts/list/UserPosts.vue';
 import UserProfile from '../pages/user/UserProfile.vue';
 import AllPostsList from '../pages/posts/list/AllPostsPage.vue';
 import CreatePost from '../pages/posts/create/CreatePost.vue';
+import AddCategory from '../pages/category/AddCategory.vue';
 
 const routes = [
   {
@@ -58,6 +59,14 @@ const routes = [
     path: '/profile',
     name: ROUTE_NAMES.PROFILE,
     component: UserProfile,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/category',
+    name: ROUTE_NAMES.CATEGORY,
+    component: AddCategory,
     meta: {
       requiresAuth: true,
     },

@@ -4,16 +4,18 @@ import categoryApiController from '../../../api/CategoryApiController.ts';
 import { useField, useForm } from 'vee-validate';
 import postApiController, { ICreatePost } from '../../../api/PostApiController.ts';
 import { useRouter } from 'vue-router';
+import { useSnackbarStore } from '@/store/snackbar.ts';
 
 const router = useRouter();
 
 const fetchedCategories = ref([]);
 const isLoading = ref(false);
+const snackbarStore = useSnackbarStore();
 
 onMounted(async () => {
   isLoading.value = true;
   const response = await categoryApiController.getAllCategories();
-  fetchedCategories.value = response.data.data;
+  fetchedCategories.value = response.data;
   isLoading.value = false;
 });
 
@@ -39,6 +41,7 @@ const { handleSubmit, handleReset } = useForm<CreatePostForm>({
     },
   },
 });
+
 const title = useField('title');
 const content = useField('content');
 const categories = useField<number[]>('categories');
@@ -56,6 +59,9 @@ const submit = handleSubmit(async ({ content, title, categories }) => {
 
   const response = await postApiController.createPost(data);
   if (response.status === 200) {
+    snackbarStore.showMessage('Post created', 'success');
+    const myMusic = document.getElementById('audio2');
+    myMusic.play();
     handleReset();
     await router.push('/posts');
   }

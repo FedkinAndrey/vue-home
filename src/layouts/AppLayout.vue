@@ -2,6 +2,8 @@
 import Preloader from '../components/base/AppPreloader.vue';
 import { useSnackbarStore } from '../store/snackbar.ts';
 import AppHeader from '../components/header/AppHeader.vue';
+import ConfirmModal from '../components/base/Modal/ConfirmModal.vue';
+import AppAudio from '../components/base/AppAudio.vue';
 
 interface Props {
   isActive?: boolean;
@@ -23,11 +25,13 @@ const snackbarStore = useSnackbarStore();
     <Preloader v-if="loading" />
 
     <app-header />
-
+    <ConfirmModal />
     <v-main class="d-flex align-center justify-center">
       <slot></slot>
     </v-main>
   </v-layout>
+
+  <app-audio />
 </template>
 
 <style lang="scss"></style>
