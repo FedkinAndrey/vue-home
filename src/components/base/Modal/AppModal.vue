@@ -14,7 +14,6 @@ const props = withDefaults(defineProps<ModalProps>(), {
 const emit = defineEmits(['update:open']);
 
 const closeModalDefault = () => {
-  // props.close();
   emit('update:open', false);
 };
 </script>

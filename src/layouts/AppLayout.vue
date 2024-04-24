@@ -10,7 +10,7 @@ interface Props {
   loading: boolean;
 }
 
-const { loading, isActive } = defineProps<Props>();
+const { loading } = defineProps<Props>();
 const snackbarStore = useSnackbarStore();
 </script>
 

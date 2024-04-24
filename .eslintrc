@@ -6,9 +6,11 @@
   },
   "extends": [
     "plugin:vue/strongly-recommended",
+    "plugin:vue/vue3-essential",
     "eslint:recommended",
     "@vue/typescript/recommended",
-    "prettier"
+    "prettier",
+    "plugin:@typescript-eslint/recommended"
   ],
   "plugins": [
     "@typescript-eslint",
